@@ -4,6 +4,56 @@
   font-weight:900;
   font-display:swap
 }
+
+/* Original INCOM emblem, placed in the scene rather than a navigation bar. */
+.hero-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-identity img {
+  width: 64px;
+  height: auto;
+}
+.hero-identity span {
+  line-height: 1.65;
+}
+.opening-emblem {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: clamp(64px, 7vw, 100px);
+  height: auto;
+  transform: translateX(-50%);
+  filter: invert(1);
+  transition: opacity .3s ease;
+}
+.opening.depart .opening-emblem {
+  opacity: 0;
+}
+footer .footer-logo {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 4vw, 64px);
+  font-size: clamp(85px, 20vw, 310px);
+}
+.footer-emblem {
+  width: clamp(65px, 14vw, 200px);
+  height: auto;
+  filter: invert(1);
+  flex-shrink: 0;
+}
+@media(max-width:700px) {
+  .hero-identity {
+    gap: 10px;
+  }
+  .hero-identity img {
+    width: 46px;
+  }
+  .hero-identity span {
+    font-size: 7px;
+  }
+}
 :root {
   --paper:#f2f0e8;
   --ink:#23231f;
