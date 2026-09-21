@@ -86,6 +86,7 @@
   const milestones = [...history.querySelectorAll('.timeline article')];
   const stopButtons = [...history.querySelectorAll('[data-stop]')];
   let flight = null;
+  let originStops = [];
   let activeProject = -1;
   let currentStop = -1;
   let scrollFrame = 0;
@@ -100,7 +101,8 @@
       const t = Math.max(0, Math.min(1, (value - a) / (b - a)));
       return t * t * (3 - 2 * t);
     };
-    const darkness = staticMotion ? 0 : smooth(.18, .38, activityProgress) * (1 - smooth(.64, .94, activityProgress));
+    // Fade across almost half the activity archive in each direction, rather than one short row.
+    const darkness = staticMotion ? 0 : smooth(0, .46, activityProgress) * (1 - smooth(.54, 1, activityProgress));
     const channel = (light, dark) => Math.round(light + (dark - light) * darkness);
     activities.style.setProperty('--activity-bg', `rgb(${channel(250, 16)}, ${channel(250, 23)}, ${channel(250, 32)})`);
     const darkSurface = darkness > .56;
@@ -140,7 +142,7 @@
     const rect = history.getBoundingClientRect();
     const travel = Math.max(1, history.offsetHeight - stage.offsetHeight);
     const progress = Math.max(0, Math.min(1, -rect.top / travel));
-    const stop = Math.min(2, Math.floor(progress * 3));
+    const stop = Math.max(0, originStops.filter(point => progress >= point).length - 1);
     if (stop !== currentStop) {
       currentStop = stop;
       milestones.forEach((el, index) => el.classList.toggle('is-current', index === stop));
@@ -158,12 +160,13 @@
   stopButtons.forEach(button => button.addEventListener('click', () => {
     const index = Number(button.dataset.stop);
     const travel = Math.max(1, history.offsetHeight - stage.offsetHeight);
-    const progress = [.02, .5, .99][index];
+    const progress = Math.min(1, originStops[index] + .045);
     window.scrollTo({ top: history.getBoundingClientRect().top + scrollY + travel * progress, behavior: 'instant' });
     paintChoreography();
   }));
   paintChoreography();
   import('./origin-scene.js').then(module => {
+    originStops = module.ORIGIN_STOPS;
     flight = module.mountOrigin(history.querySelector('.origin-space'), paused);
     history.classList.add('flight-ready');
     paintChoreography();
