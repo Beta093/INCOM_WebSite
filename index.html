@@ -1,226 +1,55 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="1981년부터 배움과 프로젝트, 사람을 연결해 온 인하대학교 컴퓨터 연구분과 중앙동아리 INCOM입니다."
-    />
-    <meta name="theme-color" content="#edf0e8" />
-    <title>INCOM — Digital Club Archive</title>
-    <link rel="icon" href="assets/incom-mark.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">본문으로 바로가기</a>
-
-    <header class="site-header" data-header>
-      <a class="brand" href="#top" aria-label="INCOM 홈">
-        <span class="brand-mark"><img src="assets/incom-mark.svg" alt="" /></span>
-        <span>INCOM</span>
-      </a>
-      <nav class="desktop-nav" aria-label="주요 메뉴">
-        <a href="#about">소개</a>
-        <a href="#history">역사</a>
-        <a href="#activities">활동</a>
-        <a href="#achievements">성과</a>
-      </nav>
-      <div class="header-meta">
-        <span>37.4500° N</span>
-        <span>126.6535° E</span>
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2f0e8">
+  <meta name="description" content="1981년부터 배움과 프로젝트, 사람을 연결하는 인하대학교 컴퓨터 연구분과 중앙동아리 INCOM.">
+  <title>INCOM — A space for curious minds.</title>
+  <link rel="icon" href="assets/incom-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="gallery.css"><script src="gallery.js" defer></script>
+</head>
+<body>
+  <a href="#main" class="skip-link">본문 바로가기</a>
+  <div class="opening" hidden aria-label="전시 오프닝">
+    <div class="opening-panel left"></div><div class="opening-panel right"></div>
+    <div class="opening-type" aria-hidden="true">IN<span>COM</span><small>A SPACE FOR CURIOUS MINDS.</small></div>
+    <button class="opening-skip" type="button">바로 입장하기 ↗</button>
+  </div>
+  <main id="main">
+    <section id="top" class="hero">
+      <div class="hero-topline mono"><span>INCOM · INHA UNIVERSITY COMPUTER CLUB</span><span class="edition">EST. 1981 — STILL CURIOUS.</span></div>
+      <h1 class="hero-title">CURIOUS<br><span>BY NATURE.</span></h1>
+      <div class="gallery-object">
+        <div class="object-shadow" aria-hidden="true"></div>
+        <div id="scene" role="img" aria-label="지식과 연결을 상징하는 은빛 매듭과 파란 구체의 3D 조형물"><img class="scene-fallback" src="assets/ice-relic-cutout.webp" alt=""></div>
+        <span class="specimen mono" aria-hidden="true">FIG. 01<br>THE CONNECTION</span>
+        <span class="specimen specimen-right mono" aria-hidden="true">∞ IDEAS<br>ONE COMMUNITY</span>
       </div>
-      <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu">
-        <span>MENU</span>
-        <i></i><i></i>
-      </button>
-    </header>
-
-    <aside class="mobile-menu" id="mobile-menu" aria-hidden="true">
-      <p>INHA UNIVERSITY COMPUTER CLUB</p>
-      <nav aria-label="모바일 메뉴">
-        <a href="#about"><span>01</span>소개</a>
-        <a href="#history"><span>02</span>역사</a>
-        <a href="#activities"><span>03</span>활동</a>
-        <a href="#achievements"><span>04</span>성과</a>
-      </nav>
-    </aside>
-
-    <main id="main">
-      <section class="hero" id="top">
-        <div class="hero-noise" aria-hidden="true"></div>
-        <div class="hero-orbit" aria-hidden="true">
-          <span class="orbit orbit-a"></span>
-          <span class="orbit orbit-b"></span>
-          <span class="orbit orbit-c"></span>
-        </div>
-
-        <div class="hero-copy">
-          <p class="kicker reveal">INHA UNIVERSITY · SINCE 1981</p>
-          <h1 class="reveal">
-            <span>IN</span><span class="outline">COM</span>
-          </h1>
-          <p class="hero-lead reveal">컴퓨터를 배우고,<br />함께 만들고, 연결합니다.</p>
-        </div>
-
-        <div class="hero-object" data-parallax aria-hidden="true">
-          <div class="object-aura"></div>
-          <img src="assets/ice-relic-cutout.webp" alt="" />
-          <span class="object-label label-one">KNOWLEDGE<br />OBJECT 001</span>
-          <span class="object-label label-two">ROTATE / EXPLORE</span>
-        </div>
-
-        <div class="hero-footer">
-          <p>1981년부터 이어진<br />배움과 연결의 커뮤니티</p>
-          <a class="round-link" href="#about" aria-label="INCOM 소개로 이동"><span>SCROLL</span>↓</a>
-          <p class="hero-index">ARCHIVE<br />2026 / 47TH</p>
-        </div>
-      </section>
-
-      <section class="manifesto section" id="about">
-        <div class="section-index reveal">01 / WHO WE ARE</div>
-        <div class="manifesto-grid">
-          <p class="eyebrow reveal">ABOUT INCOM</p>
-          <h2 class="display-copy reveal">좋아하는 사람들이<br />함께 배우고<br /><em>만드는 곳.</em></h2>
-          <p class="body-copy reveal">
-            INCOM은 1981년 11월 5일 시작된 인하대학교 컴퓨터 연구분과 중앙동아리입니다.
-            컴퓨터에 관한 연구와 개발, 지식의 나눔을 바탕으로 함께 성장하는 커뮤니티를 만들어갑니다.
-          </p>
-          <p class="body-copy secondary reveal">
-            전국 대학 컴퓨터 동아리 연합 UNICOSA와 교류하며, 전공과 경험에 관계없이
-            교육·스터디·프로젝트·친목 활동을 함께합니다.
-          </p>
-        </div>
-
-        <div class="values">
-          <article class="value-card reveal">
-            <span>01</span><i aria-hidden="true">●</i>
-            <h3>Community</h3>
-            <p>함께 탐구하고 서로의 성장을 돕는 컴퓨터 동아리</p>
-          </article>
-          <article class="value-card reveal">
-            <span>02</span><i aria-hidden="true">✦</i>
-            <h3>Sharing</h3>
-            <p>배운 지식과 경험을 나누며 더 넓게 성장하는 문화</p>
-          </article>
-          <article class="value-card reveal">
-            <span>03</span><i aria-hidden="true">◆</i>
-            <h3>Diversity</h3>
-            <p>전공과 경험에 관계없이 다양한 관심사가 만나는 곳</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="history section" id="history">
-        <div class="section-index reveal">02 / TIME CAPSULE</div>
-        <div class="history-intro">
-          <p class="eyebrow reveal">OUR HISTORY</p>
-          <h2 class="display-copy reveal">45년의 시간이<br /><em>하나의 궤도로.</em></h2>
-        </div>
-        <div class="timeline" aria-label="INCOM 연혁">
-          <article class="timeline-item reveal">
-            <time>1981</time>
-            <span class="timeline-dot"></span>
-            <div><h3>11월 5일 창립</h3><p>인하대학교 컴퓨터 연구분과 중앙동아리 INCOM이 시작되었습니다.</p></div>
-          </article>
-          <article class="timeline-item reveal">
-            <time>1983</time>
-            <span class="timeline-dot"></span>
-            <div><h3>회칙 제정</h3><p>연구, 개발, 보급과 회원 간 친목이라는 동아리의 목적을 세웠습니다.</p></div>
-          </article>
-          <article class="timeline-item reveal">
-            <time>NOW</time>
-            <span class="timeline-dot active"></span>
-            <div><h3>1981년부터 이어진 연결</h3><p>교육, 스터디, 프로젝트와 교류 활동을 이어가는 컴퓨터 동아리입니다.</p></div>
-          </article>
-        </div>
-      </section>
-
-      <section class="activities section" id="activities">
-        <div class="section-index reveal">03 / CURRENT PROGRAM</div>
-        <div class="activities-head">
-          <div>
-            <p class="eyebrow reveal">2026 ACTIVITIES</p>
-            <h2 class="display-copy reveal">배우고, 만들고,<br /><em>연결합니다.</em></h2>
-          </div>
-          <p class="activities-intro reveal">47기 신입부원과 함께 만들어갈<br />2026년 INCOM의 네 가지 활동 축입니다.</p>
-        </div>
-
-        <div class="exhibit">
-          <div class="exhibit-stage reveal">
-            <figure data-activity-image>
-              <img src="assets/activities/learn.webp" alt="강의실에서 진행 중인 INCOM 교육" />
-              <figcaption><span data-activity-number>01</span><span data-activity-key>LEARN</span></figcaption>
-            </figure>
-            <div class="stage-corner corner-tl"></div><div class="stage-corner corner-tr"></div>
-            <div class="stage-corner corner-bl"></div><div class="stage-corner corner-br"></div>
-          </div>
-
-          <div class="activity-list reveal">
-            <button class="activity-item active" type="button" data-index="0"
-              data-image="assets/activities/learn.webp" data-alt="강의실에서 진행 중인 INCOM 교육">
-              <span>01</span><div><strong>LEARN</strong><h3>기초부터 깊이까지</h3><p>정기교육과 참여자 중심 스터디로 함께 성장합니다.</p></div><i>↗</i>
-            </button>
-            <button class="activity-item" type="button" data-index="1"
-              data-image="assets/activities/build.webp" data-alt="INCOM 아이디어톤 참가자 단체 사진">
-              <span>02</span><div><strong>BUILD</strong><h3>아이디어를 현실로</h3><p>아이디어 구상부터 구현까지 전 과정을 직접 경험합니다.</p></div><i>↗</i>
-            </button>
-            <button class="activity-item" type="button" data-index="2"
-              data-image="assets/activities/connect.webp" data-alt="INCOM 체육대회에서 게임을 즐기는 부원들">
-              <span>03</span><div><strong>CONNECT</strong><h3>사람과 경험을 연결</h3><p>환영회, MT, 체육대회에서 오래 기억할 관계를 만듭니다.</p></div><i>↗</i>
-            </button>
-            <button class="activity-item" type="button" data-index="3"
-              data-image="assets/activities/expand.webp" data-alt="UNICOSA 연합 세미나 참가자 단체 사진">
-              <span>04</span><div><strong>EXPAND</strong><h3>학교 밖으로 더 넓게</h3><p>연합 활동과 세미나, 기업 탐방으로 시야를 넓힙니다.</p></div><i>↗</i>
-            </button>
-          </div>
-        </div>
-
-        <div class="program-notes reveal">
-          <span>PYTHON 정기교육</span><span>선형대수 · C++</span><span>ML/DL 스터디</span>
-          <span>자체 해커톤</span><span>UNICOSA</span><span>기업 탐방</span>
-        </div>
-      </section>
-
-      <section class="achievements section" id="achievements">
-        <div class="section-index reveal">04 / PROVEN BY DOING</div>
-        <div class="achievement-layout">
-          <div class="achievement-title">
-            <p class="eyebrow reveal">FIELD NOTES · 2025</p>
-            <h2 class="display-copy reveal">배움은<br /><em>결과로.</em></h2>
-          </div>
-          <ol class="achievement-list">
-            <li class="reveal"><span>01</span><strong>AI 융합 데이터 해커톤 우수상</strong><small>AWARD</small></li>
-            <li class="reveal"><span>02</span><strong>인하 넥스트 캠퍼스 챌린지 우수상</strong><small>AWARD</small></li>
-            <li class="reveal"><span>03</span><strong>ILOAD 글로벌 해커톤 최우수상</strong><small>GRAND PRIZE</small></li>
-            <li class="reveal"><span>04</span><strong>SW중심대학 디지털 경진대회 AI부문 대상</strong><small>GRAND PRIZE</small></li>
-          </ol>
-        </div>
-      </section>
-
-      <section class="contact section">
-        <div class="contact-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
-        <p class="eyebrow reveal">46TH EXECUTIVE COMMITTEE</p>
-        <h2 class="reveal">함께 다음 장면을<br /><em>만들어 볼까요?</em></h2>
-        <div class="contact-links reveal">
-          <a href="https://www.incominha.com/team">운영진 만나기 <span>↗</span></a>
-          <a href="https://www.instagram.com/inha_incom/">Instagram <span>↗</span></a>
-          <a href="mailto:incom44th@gmail.com">Email <span>↗</span></a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <a class="brand footer-brand" href="#top"><span class="brand-mark"><img src="assets/incom-mark.svg" alt="" /></span><span>INCOM</span></a>
-      <p>INHA UNIVERSITY COMPUTER CLUB<br />© 2026 INCOM · SINCE 1981</p>
-      <p>LEARN · BUILD · CONNECT · EXPAND</p>
-    </footer>
-  </body>
+      <div class="hero-note"><span class="asterisk" aria-hidden="true">✳</span><p>컴퓨터를 좋아하는 마음이<br>새로운 세계의 시작이 되도록.</p></div>
+      <div class="object-tools"><span class="mono drag-hint">DRAG TO EXPLORE ↔</span><button type="button" class="motion-toggle" aria-pressed="false">모션 일시정지 Ⅱ</button></div>
+      <div class="hero-bottom"><p>배우고, 만들고, 연결하는<br>인하대학교 컴퓨터 연구분과 중앙동아리.</p><a href="#activities" class="pill dark">2026 활동 둘러보기 <span>↗</span></a><a href="#about" class="scroll-note mono">SCROLL TO DISCOVER <span>↓</span></a></div>
+    </section>
+    <div class="ticker" aria-hidden="true"><div><span>IDEAS INTO REALITY.</span><i>✳</i><span>STRANGERS INTO FRIENDS.</span><i>✳</i><span>IDEAS INTO REALITY.</span><i>✳</i><span>STRANGERS INTO FRIENDS.</span><i>✳</i></div></div>
+    <section class="about section" id="about">
+      <div class="section-meta mono"><span>01 / THE COLLECTIVE</span><span>DIFFERENT MINDS. SHARED CURIOSITY.</span></div>
+      <div class="about-grid"><div class="about-art" aria-hidden="true"><div class="orbit-stamp">INCOM<br><em>since 1981</em></div><span class="big-star">✳</span><span class="small-label mono">A PLACE TO BELONG.</span></div><div><p class="eyebrow mono">안녕, 우리는 INCOM.</p><h2 class="reveal">혼자 품은 호기심이<br>함께 만드는<br><em>가능성이 되는 곳.</em></h2><p class="copy">INCOM은 1981년 11월 5일 시작된 인하대학교 컴퓨터 연구분과 중앙동아리입니다. 컴퓨터에 관한 연구와 개발, 지식의 나눔을 바탕으로 함께 성장하는 커뮤니티를 만들어갑니다.</p><p class="copy muted">전국 대학 컴퓨터 동아리 연합 UNICOSA와 교류하며, 전공과 경험에 관계없이 교육·스터디·프로젝트·친목 활동을 함께합니다.</p></div></div>
+      <div class="values"><article><span class="mono">01 / COMMUNITY</span><h3>같이, 더 멀리.</h3><p>함께 탐구하고 서로의 성장을 돕는 컴퓨터 동아리</p></article><article><span class="mono">02 / SHARING</span><h3>배움은 나눌수록.</h3><p>배운 지식과 경험을 나누며 더 넓게 성장하는 문화</p></article><article><span class="mono">03 / DIVERSITY</span><h3>다름이 모이는 곳.</h3><p>전공과 경험에 관계없이 다양한 관심사가 만나는 곳</p></article></div>
+    </section>
+    <section class="activities section" id="activities">
+      <div class="section-meta mono"><span>02 / IN GOOD COMPANY</span><span>2026 PROGRAM — 47TH GENERATION</span></div>
+      <div class="section-heading"><h2 class="display reveal">LESS TALK.<br><em>MORE MAKING.</em></h2><p>배우고, 만들고, 연결하며 함께 성장합니다.<br>47기 신입부원과 함께 만들어갈<br>2026년 INCOM의 네 가지 활동 축.</p></div>
+      <nav class="activity-nav mono" aria-label="활동 바로가기"><a href="#learn">01 LEARN</a><a href="#build">02 BUILD</a><a href="#connect">03 CONNECT</a><a href="#expand">04 EXPAND</a></nav>
+      <div class="exhibits">
+        <article class="exhibit exhibit-learn" id="learn"><div class="exhibit-copy"><span class="mono">01 / LEARN</span><h3>기초부터<br><em>깊이까지.</em></h3><p>정기교육과 참여자 중심 스터디로 함께 성장합니다.</p><ul><li>Python 정기교육</li><li>선형대수·바이브코딩·C++</li><li>ML/DL·공업수학·백준 스터디</li></ul><span class="exhibit-symbol" aria-hidden="true">{ }</span></div><figure><img src="assets/activities/learn.webp" width="525" height="510" alt="강의실에서 진행 중인 INCOM 교육" loading="lazy"><figcaption class="mono">LEARN SOMETHING. SHARE EVERYTHING. <span>↗</span></figcaption><span class="photo-sticker" aria-hidden="true">STAY<br>CURIOUS!</span></figure></article>
+        <article class="exhibit exhibit-build" id="build"><div class="exhibit-copy"><span class="mono">02 / BUILD</span><h3>아이디어를<br><em>현실로.</em></h3><p>아이디어 구상부터 구현까지 전 과정을 직접 경험합니다.</p><ul><li>단계형 자체 해커톤</li><li>기획·개발 멘토링</li><li>컴퓨터 동아리 연합 도전</li></ul><span class="exhibit-symbol" aria-hidden="true">↗</span></div><figure><img src="assets/activities/build.webp" width="525" height="435" alt="INCOM 아이디어톤 참가자 단체 사진" loading="lazy"><figcaption class="mono">FROM WHAT IF TO WHAT’S NEXT. <span>↗</span></figcaption><span class="photo-sticker" aria-hidden="true">MAKE<br>IT REAL.</span></figure></article>
+        <article class="exhibit exhibit-connect" id="connect"><div class="exhibit-copy"><span class="mono">03 / CONNECT</span><h3>사람과 경험을<br><em>연결.</em></h3><p>환영회, MT, 체육대회에서 오래 기억할 관계를 만듭니다.</p><ul><li>신입생 환영회</li><li>친해지길 바라</li><li>MT·체육대회·정기 교류</li></ul><span class="exhibit-symbol" aria-hidden="true">∞</span></div><figure><img src="assets/activities/connect.webp" width="760" height="560" alt="INCOM 체육대회에서 게임을 즐기는 부원들" loading="lazy"><figcaption class="mono">GOOD PEOPLE. GREAT MEMORIES. <span>↗</span></figcaption><span class="photo-sticker" aria-hidden="true">BETTER<br>TOGETHER.</span></figure></article>
+        <article class="exhibit exhibit-expand" id="expand"><div class="exhibit-copy"><span class="mono">04 / EXPAND</span><h3>학교 밖으로<br><em>더 넓게.</em></h3><p>연합 활동과 세미나, 기업 탐방으로 시야를 넓힙니다.</p><ul><li>UNICOSA 연합 활동</li><li>초청 세미나</li><li>기업 탐방과 동아리 교류</li></ul><span class="exhibit-symbol" aria-hidden="true">✳</span></div><figure><img src="assets/activities/expand.webp" width="682" height="735" alt="UNICOSA 연합 세미나 참가자 단체 사진" loading="lazy"><figcaption class="mono">THERE’S A WORLD OUT THERE. <span>↗</span></figcaption><span class="photo-sticker" aria-hidden="true">GO<br>BEYOND.</span></figure></article>
+      </div>
+    </section>
+    <section class="history section" id="history"><div class="section-meta mono"><span>03 / ROOTED IN CURIOSITY</span><span>1981 → NOW → NEXT</span></div><div class="history-head"><h2 class="display reveal">OLD ROOTS.<br><em>NEW ROUTES.</em></h2><span class="history-flower" aria-hidden="true">✳</span></div><div class="timeline"><article><span class="year">1981<span>↗</span></span><div><span class="mono">THE BEGINNING / 11.05</span><h3>11월 5일 창립</h3><p>인하대학교 컴퓨터 연구분과 중앙동아리 INCOM이 시작되었습니다.</p></div></article><article><span class="year">1983<span>↗</span></span><div><span class="mono">OUR FOUNDATION</span><h3>회칙 제정</h3><p>연구, 개발, 보급과 회원 간 친목이라는 동아리의 목적을 세웠습니다.</p></div></article><article><span class="year">NOW<span>↗</span></span><div><span class="mono">THE STORY CONTINUES</span><h3>1981년부터 이어진 연결</h3><p>교육, 스터디, 프로젝트와 교류 활동을 이어가는 컴퓨터 동아리입니다.</p></div></article></div></section>
+    <section class="awards section" id="achievements"><div class="section-meta mono"><span>04 / PROOF OF CURIOSITY</span><span>MADE BY INCOM</span></div><div class="awards-grid"><div><p class="eyebrow mono">PROVEN BY DOING</p><h2 class="reveal">배움은<br><em>결과로.</em></h2><div class="award-star" aria-hidden="true">✷</div></div><ol><li><span class="mono">01</span><strong>AI 융합 데이터 해커톤</strong><span class="award-badge">우수상</span></li><li><span class="mono">02 / 2025</span><strong>인하 넥스트 캠퍼스 챌린지</strong><span class="award-badge">우수상</span></li><li><span class="mono">03 / 2025</span><strong>ILOAD 글로벌 해커톤</strong><span class="award-badge">최우수상</span></li><li><span class="mono">04 / 2025</span><strong>SW중심대학 디지털 경진대회 AI부문</strong><span class="award-badge">대상</span></li></ol></div></section>
+    <section class="contact section" id="contact"><div class="section-meta mono"><span>05 / YOUR NEXT CHAPTER</span><span>46TH EXECUTIVE COMMITTEE</span></div><p class="contact-intro">2026년 INCOM을 함께 운영하는 사람들.<br>그리고 다음 이야기를 만들어 갈 당신.</p><h2 class="display">COME AS<br>YOU <span class="serif">are.</span><span class="contact-star" aria-hidden="true">✳</span></h2><div class="contact-bottom"><a class="pill dark" href="https://www.incominha.com/team">운영진 만나기 <span>↗</span></a><div><a href="https://www.instagram.com/inha_incom/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="mailto:incom44th@gmail.com">incom44th@gmail.com ↗</a></div></div></section>
+  </main>
+  <footer><a href="#top" class="footer-logo">incom<span>®</span></a><nav class="footer-nav" aria-label="사이트 바로가기"><a href="#about">INCOM 소개</a><a href="#activities">2026 활동</a><a href="#history">역사</a><a href="https://github.com/2026-INCOM" target="_blank" rel="noreferrer">아카이브 ↗</a><a href="https://www.incominha.com/team">운영진 ↗</a></nav><div class="footer-bottom mono"><span>© 2026 INCOM — INHA UNIVERSITY COMPUTER CLUB</span><button type="button" class="replay">오프닝 다시 보기 ↺</button><a href="#top">BACK TO TOP ↑</a></div></footer>
+</body>
 </html>
