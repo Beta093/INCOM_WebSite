@@ -78,6 +78,9 @@
   const projects = [...document.querySelectorAll('.project')];
   const pillar = document.querySelector('.activity-pillar');
   const activityLinks = [...document.querySelectorAll('.activity-nav a')];
+  const activities = document.querySelector('.activities');
+  const exhibit = document.querySelector('.activity-exhibit');
+  const ribbon = document.querySelector('.brand-ribbon');
   const history = document.querySelector('.history');
   const stage = document.querySelector('.origin-stage');
   const milestones = [...history.querySelectorAll('.timeline article')];
@@ -91,6 +94,25 @@
   function paintChoreography() {
     scrollFrame = 0;
     const staticMotion = paused || reduced.matches;
+    const exhibitRect = exhibit.getBoundingClientRect();
+    const activityProgress = Math.max(0, Math.min(1, (innerHeight * .5 - exhibitRect.top) / exhibitRect.height));
+    const smooth = (a, b, value) => {
+      const t = Math.max(0, Math.min(1, (value - a) / (b - a)));
+      return t * t * (3 - 2 * t);
+    };
+    const darkness = staticMotion ? 0 : smooth(.18, .38, activityProgress) * (1 - smooth(.64, .94, activityProgress));
+    const channel = (light, dark) => Math.round(light + (dark - light) * darkness);
+    activities.style.setProperty('--activity-bg', `rgb(${channel(250, 16)}, ${channel(250, 23)}, ${channel(250, 32)})`);
+    const darkSurface = darkness > .56;
+    activities.style.setProperty('--activity-fg', darkSurface ? '#f6f8fb' : '#101720');
+    // During the midpoint use full-contrast copy; mute only on settled surfaces.
+    activities.style.setProperty('--activity-muted', darkness > .85 ? '#b5c2d5' : darkness < .15 ? '#566172' : darkSurface ? '#fff' : '#101720');
+    activities.style.setProperty('--activity-accent', darkSurface ? '#a3bfff' : darkness < .15 ? '#2457ed' : '#101720');
+    activities.style.setProperty('--line', darkSurface ? '#ffffff35' : '#13192035');
+    if (!staticMotion) {
+      const ribbonProgress = Math.max(0, Math.min(1, (innerHeight - ribbon.getBoundingClientRect().top) / (innerHeight + ribbon.offsetHeight)));
+      ribbon.style.setProperty('--ribbon-shift', `${-60 - ribbonProgress * Math.min(innerWidth * .7, 760)}px`);
+    }
     let nearest = 0;
     let distance = Infinity;
     projects.forEach((project, index) => {
@@ -146,7 +168,7 @@
     history.classList.add('flight-ready');
     paintChoreography();
   }).catch(() => {
-    // The full chronological text remains visible if WebGL is unavailable.
+    // The full chronological text remains visible if the schematic cannot load.
     history.classList.remove('flight-ready');
   });
 
