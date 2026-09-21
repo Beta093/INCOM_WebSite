@@ -74,6 +74,46 @@
       observer.observe(el);
     });
   }
+  // A compact scroll-drawn thread: no pinned viewport or artificial scroll distance.
+  const journey = document.querySelector('.origin-journey');
+  const thread = journey.querySelector('.origin-thread');
+  const paths = [...thread.querySelectorAll('path')];
+  const milestones = [...journey.querySelectorAll('.timeline article')];
+  const mobileJourney = matchMedia('(max-width: 700px)');
+  let journeyFrame = 0;
+
+  function layoutJourney() {
+    const width = journey.clientWidth;
+    const height = journey.clientHeight;
+    journey.closest('.history').style.setProperty('--thread-lead', `${journey.offsetTop}px`);
+    thread.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    const points = milestones.map((el, index) => ({
+      x: el.offsetLeft + (mobileJourney.matches ? (index === 1 ? el.offsetWidth - 24 : 24) : el.offsetWidth / 2),
+      y: el.offsetTop
+    }));
+    const [a, b, c] = points;
+    const bend = mobileJourney.matches ? 55 : 75;
+    const d = `M${width / 2} 0 C${width / 2} 45 ${a.x} ${a.y - 45} ${a.x} ${a.y} C${a.x} ${a.y + bend} ${b.x} ${b.y - bend} ${b.x} ${b.y} C${b.x} ${b.y + bend} ${c.x} ${c.y - bend} ${c.x} ${c.y} C${c.x} ${c.y + bend} ${width / 2} ${height - 25} ${width / 2} ${height - 10}`;
+    paths.forEach(path => path.setAttribute('d', d));
+    paintJourney();
+  }
+  function paintJourney() {
+    journeyFrame = 0;
+    const rect = journey.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(1, (innerHeight * .88 - rect.top) / (rect.height * .85)));
+    const staticMotion = paused || reduced.matches;
+    journey.querySelector('.thread-draw').style.strokeDashoffset = staticMotion ? '0' : String(1 - progress);
+    journey.style.setProperty('--journey-depth', staticMotion ? '0' : String(progress * 2 - 1));
+  }
+  function queueJourney() {
+    if (!journeyFrame) journeyFrame = requestAnimationFrame(paintJourney);
+  }
+  window.addEventListener('scroll', queueJourney, { passive: true });
+  window.addEventListener('resize', layoutJourney);
+  document.addEventListener('gallery-motion', queueJourney);
+  document.fonts.ready.then(layoutJourney);
+  layoutJourney();
+
   // Keep the page and all content usable if WebGL or the module cannot load.
   import('./scene.js').then(module => module.mountScene(document.querySelector('#scene'), paused))
     .catch(() => {
