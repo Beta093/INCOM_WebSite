@@ -74,45 +74,81 @@
       observer.observe(el);
     });
   }
-  // A compact scroll-drawn thread: no pinned viewport or artificial scroll distance.
-  const journey = document.querySelector('.origin-journey');
-  const thread = journey.querySelector('.origin-thread');
-  const paths = [...thread.querySelectorAll('path')];
-  const milestones = [...journey.querySelectorAll('.timeline article')];
-  const mobileJourney = matchMedia('(max-width: 700px)');
-  let journeyFrame = 0;
+  // Shared scroll choreography: one activity pillar and a short camera flight.
+  const projects = [...document.querySelectorAll('.project')];
+  const pillar = document.querySelector('.activity-pillar');
+  const activityLinks = [...document.querySelectorAll('.activity-nav a')];
+  const history = document.querySelector('.history');
+  const stage = document.querySelector('.origin-stage');
+  const milestones = [...history.querySelectorAll('.timeline article')];
+  const stopButtons = [...history.querySelectorAll('[data-stop]')];
+  let flight = null;
+  let activeProject = -1;
+  let currentStop = -1;
+  let scrollFrame = 0;
+  let pillarTimer;
 
-  function layoutJourney() {
-    const width = journey.clientWidth;
-    const height = journey.clientHeight;
-    journey.closest('.history').style.setProperty('--thread-lead', `${journey.offsetTop}px`);
-    thread.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    const points = milestones.map((el, index) => ({
-      x: el.offsetLeft + (mobileJourney.matches ? (index === 1 ? el.offsetWidth - 24 : 24) : el.offsetWidth / 2),
-      y: el.offsetTop
-    }));
-    const [a, b, c] = points;
-    const bend = mobileJourney.matches ? 55 : 75;
-    const d = `M${width / 2} 0 C${width / 2} 45 ${a.x} ${a.y - 45} ${a.x} ${a.y} C${a.x} ${a.y + bend} ${b.x} ${b.y - bend} ${b.x} ${b.y} C${b.x} ${b.y + bend} ${c.x} ${c.y - bend} ${c.x} ${c.y} C${c.x} ${c.y + bend} ${width / 2} ${height - 25} ${width / 2} ${height - 10}`;
-    paths.forEach(path => path.setAttribute('d', d));
-    paintJourney();
-  }
-  function paintJourney() {
-    journeyFrame = 0;
-    const rect = journey.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, (innerHeight * .88 - rect.top) / (rect.height * .85)));
+  function paintChoreography() {
+    scrollFrame = 0;
     const staticMotion = paused || reduced.matches;
-    journey.querySelector('.thread-draw').style.strokeDashoffset = staticMotion ? '0' : String(1 - progress);
-    journey.style.setProperty('--journey-depth', staticMotion ? '0' : String(progress * 2 - 1));
+    let nearest = 0;
+    let distance = Infinity;
+    projects.forEach((project, index) => {
+      const rect = project.getBoundingClientRect();
+      const delta = Math.abs(rect.top + rect.height / 2 - innerHeight * .5);
+      if (delta < distance) { nearest = index; distance = delta; }
+      project.style.setProperty('--image-drift', staticMotion ? '0px' : Math.max(-16, Math.min(16, (innerHeight * .5 - rect.top) * .035)) + 'px');
+    });
+    if (nearest !== activeProject) {
+      activeProject = nearest;
+      pillar.querySelector('.pillar-number').textContent = String(nearest + 1).padStart(2, '0');
+      pillar.querySelector('.pillar-key').textContent = projects[nearest].querySelector('.project-key').textContent;
+      pillar.style.setProperty('--activity-progress', (nearest + 1) / projects.length);
+      pillar.classList.remove('switching');
+      if (!staticMotion) {
+        void pillar.offsetWidth;
+        pillar.classList.add('switching');
+        clearTimeout(pillarTimer);
+        pillarTimer = setTimeout(() => pillar.classList.remove('switching'), 500);
+      }
+      projects.forEach((el, index) => el.classList.toggle('is-current', index === nearest));
+      activityLinks.forEach((el, index) => el.setAttribute('aria-current', String(index === nearest)));
+    }
+    history.classList.toggle('is-static', staticMotion);
+    const rect = history.getBoundingClientRect();
+    const travel = Math.max(1, history.offsetHeight - stage.offsetHeight);
+    const progress = Math.max(0, Math.min(1, -rect.top / travel));
+    const stop = Math.min(2, Math.floor(progress * 3));
+    if (stop !== currentStop) {
+      currentStop = stop;
+      milestones.forEach((el, index) => el.classList.toggle('is-current', index === stop));
+      stopButtons.forEach((el, index) => el.setAttribute('aria-current', String(index === stop)));
+      history.querySelector('.flight-count').textContent = String(stop + 1).padStart(2, '0') + ' / 03';
+    }
+    flight?.update(progress, staticMotion);
   }
-  function queueJourney() {
-    if (!journeyFrame) journeyFrame = requestAnimationFrame(paintJourney);
+  function queueChoreography() {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(paintChoreography);
   }
-  window.addEventListener('scroll', queueJourney, { passive: true });
-  window.addEventListener('resize', layoutJourney);
-  document.addEventListener('gallery-motion', queueJourney);
-  document.fonts.ready.then(layoutJourney);
-  layoutJourney();
+  window.addEventListener('scroll', queueChoreography, { passive: true });
+  window.addEventListener('resize', queueChoreography);
+  document.addEventListener('gallery-motion', queueChoreography);
+  stopButtons.forEach(button => button.addEventListener('click', () => {
+    const index = Number(button.dataset.stop);
+    const travel = Math.max(1, history.offsetHeight - stage.offsetHeight);
+    const progress = [.02, .5, .99][index];
+    window.scrollTo({ top: history.getBoundingClientRect().top + scrollY + travel * progress, behavior: 'instant' });
+    paintChoreography();
+  }));
+  paintChoreography();
+  import('./origin-scene.js').then(module => {
+    flight = module.mountOrigin(history.querySelector('.origin-space'), paused);
+    history.classList.add('flight-ready');
+    paintChoreography();
+  }).catch(() => {
+    // The full chronological text remains visible if WebGL is unavailable.
+    history.classList.remove('flight-ready');
+  });
 
   // Keep the page and all content usable if WebGL or the module cannot load.
   import('./scene.js').then(module => module.mountScene(document.querySelector('#scene'), paused))
