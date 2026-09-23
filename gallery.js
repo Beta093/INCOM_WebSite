@@ -92,6 +92,12 @@
   const resultsHeading = document.querySelector('.results-heading');
   const awards = document.querySelector('.awards');
   const contact = document.querySelector('.contact');
+  const journey = document.querySelector('.journey-thread');
+  const journeyPaths = [...journey.querySelectorAll('path')];
+  const heroSection = document.querySelector('.hero');
+  const aboutSection = document.querySelector('.about');
+  const specimen = document.querySelector('.collective-specimen');
+  const activityRail = document.querySelector('.activity-rail');
   const milestones = [...history.querySelectorAll('.timeline article')];
   const stopButtons = [...history.querySelectorAll('[data-stop]')];
   let flight = null;
@@ -100,6 +106,53 @@
   let currentStop = -1;
   let scrollFrame = 0;
   let pillarTimer;
+
+  function paintJourney(staticMotion) {
+    const entry = history.querySelector('.circuit-entry');
+    const enabled = !staticMotion && !!entry;
+    journey.style.visibility = enabled ? 'visible' : 'hidden';
+    body.classList.toggle('journey-ready', enabled);
+    if (!enabled) return;
+    const root = journey.getBoundingClientRect();
+    const hero = heroSection.getBoundingClientRect();
+    const about = aboutSection.getBoundingClientRect();
+    const mark = specimen.getBoundingClientRect();
+    const rail = activityRail.getBoundingClientRect();
+    const column = pillar.getBoundingClientRect();
+    const target = entry.getBoundingClientRect();
+    const marginX = about.left + parseFloat(getComputedStyle(aboutSection).paddingLeft) / 2 - root.left;
+    const railX = rail.left + rail.width / 2 - root.left;
+    const startY = hero.bottom - root.top - 28;
+    const markY = mark.top - root.top + mark.height * .52;
+    const railTop = column.top - root.top;
+    const railBottom = column.bottom - root.top;
+    const endX = target.left + target.width / 2 - root.left;
+    const endY = target.top + target.height / 2 - root.top;
+    const stageTop = stage.getBoundingClientRect().top - root.top;
+    const entryPath = innerWidth <= 700
+      ? `M${railX} ${rail.bottom - root.top} Q${marginX} ${stageTop - 20} ${marginX} ${stageTop} V${endY - 14} Q${marginX} ${endY} ${marginX + 14} ${endY} H${endX}`
+      : `M${railX} ${rail.bottom - root.top} V${stageTop - 24} Q${railX} ${stageTop - 8} ${railX + 16} ${stageTop - 8} H${endX - 32} Q${endX - 16} ${stageTop - 8} ${endX - 16} ${stageTop + 8} V${endY - 16} Q${endX - 16} ${endY} ${endX} ${endY}`;
+    const scan = innerHeight * .7 - root.top;
+    const paths = [
+      `M${marginX} ${startY} V${rail.top - root.top - 30} Q${marginX} ${rail.top - root.top} ${railX} ${rail.top - root.top} V${railTop}`,
+      `M${marginX} ${markY} H${mark.left - root.left - 5}`,
+      `M${railX} ${railBottom} V${rail.bottom - root.top}`,
+      entryPath
+    ];
+    journeyPaths.forEach((path, index) => {
+      if (path.getAttribute('d') !== paths[index]) path.setAttribute('d', paths[index]);
+      const length = path.getTotalLength();
+      let low = 0, high = length;
+      for (let step = 0; step < 12; step++) {
+        const middle = (low + high) / 2;
+        if (path.getPointAtLength(middle).y <= scan) low = middle; else high = middle;
+      }
+      const progress = index === 1 ? Math.max(0, Math.min(1, (scan - markY) / 70)) : low / Math.max(1, length);
+      path.style.strokeDashoffset = String(1 - progress);
+      path.style.opacity = progress < .001 ? '0' : index === 1 ? '.6' : '1';
+    });
+    pillar.style.setProperty('--pillar-arrive', Math.max(0, Math.min(1, (scan - railTop) / 140)));
+  }
 
   function paintChoreography() {
     scrollFrame = 0;
@@ -217,6 +270,7 @@
     }
     handoff.style.visibility = staticMotion || !exit ? 'hidden' : 'visible';
     contact.classList.toggle('spill-ready', !staticMotion && !!exit);
+    paintJourney(staticMotion);
   }
   function queueChoreography() {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(paintChoreography);

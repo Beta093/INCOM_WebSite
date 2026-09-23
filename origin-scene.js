@@ -17,6 +17,7 @@ export function mountOrigin(host, initiallyPaused) {
     <g class="circuit-node" data-node="1"><rect x="343" y="243" width="94" height="94" rx="5"/><rect x="357" y="257" width="66" height="66" rx="2"/><text x="390" y="291">02</text><text class="node-date" x="390" y="363">1983</text></g>
     <g class="circuit-node" data-node="2"><rect x="503" y="378" width="94" height="94" rx="5"/><rect x="517" y="392" width="66" height="66" rx="2"/><text x="550" y="426">03</text><text class="node-date" x="510" y="500">NOW</text></g>
     <g fill="#8191a8" font-family="monospace" font-size="10"><text x="65" y="75">INCOM / CONNECTION ARCHIVE</text><text x="65" y="541">EST.1981 — STILL BUILDING.</text><text x="600" y="541">REV. 03</text></g>
+    <circle class="circuit-entry" cx="40" cy="240" r="1" fill="none"/>
     <circle class="circuit-exit" cx="660" cy="565" r="1" fill="none"/>
     <ellipse class="circuit-cursor" rx="14" ry="14" fill="#2457ed" stroke="#fff" stroke-width="2" opacity="0"/>
   </svg>`;
