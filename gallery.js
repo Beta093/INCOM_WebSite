@@ -91,6 +91,7 @@
   const resultRows = [...document.querySelectorAll('.results li')];
   const resultsHeading = document.querySelector('.results-heading');
   const awards = document.querySelector('.awards');
+  const contact = document.querySelector('.contact');
   const milestones = [...history.querySelectorAll('.timeline article')];
   const stopButtons = [...history.querySelectorAll('[data-stop]')];
   let flight = null;
@@ -167,13 +168,13 @@
       const size = innerWidth < 700 ? 15 : 23;
       const prismX = Math.max(railX, size + 4);
       const drop = Math.max(0, prismY - y);
-      const turn = Math.min(18, drop / 3);
-      // Cross below the history controls, not diagonally through their text.
-      handoffPath.setAttribute('d', `M${x} ${y} V${prismY - turn * 2} Q${x} ${prismY - turn} ${x - turn} ${prismY - turn} H${prismX + turn} Q${prismX} ${prismY - turn} ${prismX} ${prismY}`);
+      // A descending diagonal, with soft entry and exit instead of a horizontal elbow.
+      handoffPath.setAttribute('d', `M${x} ${y} C${x} ${y + drop * .25} ${prismX} ${y + drop * .8} ${prismX} ${prismY}`);
       handoffPrism.setAttribute('d', `M${prismX} ${prismY - size} L${prismX + size} ${prismY} L${prismX} ${prismY + size} L${prismX - size} ${prismY} Z M${prismX} ${prismY - size} V${prismY + size} M${prismX - size} ${prismY} H${prismX + size}`);
       // Descend through the left gutter, then branch right into each result.
-      const lastY = rows.at(-1).top + rows.at(-1).height / 2 - root.top;
-      handoffTrunk.setAttribute('d', `M${prismX} ${prismY} C${prismX} ${prismY + 24} ${railX} ${prismY + 24} ${railX} ${prismY + 48} V${lastY}`);
+      const contactRect = contact.getBoundingClientRect();
+      const endY = contactRect.top - root.top;
+      handoffTrunk.setAttribute('d', `M${prismX} ${prismY} C${prismX} ${prismY + 24} ${railX} ${prismY + 24} ${railX} ${prismY + 48} V${endY}`);
       const trunkLength = handoffTrunk.getTotalLength();
       // Start at the prism exactly when the incoming head arrives, with no jump.
       const joinT = .5 - Math.sin(Math.asin(1 - 2 * .65) / 3);
@@ -190,7 +191,7 @@
         ray.setAttribute('d', `M${railX} ${endY} H${endX}`);
         const reach = trunkProgress > 0 ? smooth(endY - 12, endY + 12, head.y) : 0;
         // The last branch finishes when the descending head reaches its endpoint.
-        const drawn = index === rows.length - 1 && trunkProgress === 1 ? 1 : reach;
+        const drawn = reach;
         ray.style.opacity = drawn > 0 ? '1' : '0';
         ray.style.strokeDashoffset = String(1 - drawn);
         resultRows[index].classList.toggle('is-connected', drawn > .5);
@@ -208,8 +209,14 @@
       handoffCursor.setAttribute('ry', radius * (1 - squeeze * .3));
       handoffCursor.setAttribute('transform', `rotate(${Math.atan2(next.y - point.y, next.x - point.x) * 180 / Math.PI} ${point.x} ${point.y})`);
       handoffCursor.style.opacity = handoffProgress > 0 ? String(1 - smooth(.97, 1, trunkProgress)) : '0';
+      const fillStart = joinTop + contactRect.top - awards.getBoundingClientRect().top - trunkLength;
+      const fillProgress = smooth(fillStart, Math.min(20, fillStart - 1), contactRect.top);
+      contact.style.setProperty('--fill-x', `${railX}px`);
+      contact.style.setProperty('--fill-radius', `${2 + fillProgress * Math.hypot(contactRect.width, contactRect.height)}px`);
+      contact.style.setProperty('--fill-copy', String(smooth(.72, .94, fillProgress)));
     }
     handoff.style.visibility = staticMotion || !exit ? 'hidden' : 'visible';
+    contact.classList.toggle('spill-ready', !staticMotion && !!exit);
   }
   function queueChoreography() {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(paintChoreography);

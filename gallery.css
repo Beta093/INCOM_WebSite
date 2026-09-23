@@ -283,7 +283,13 @@ h2 span, h2 em { color: var(--muted); font-style: normal; }
 .results li:nth-child(3) { transition-delay: .12s; }
 .results li:nth-child(4) { transition-delay: .18s; }
 
-.contact { background: #174de4; color: white; --line: #ffffff4d; overflow: hidden; }
+.contact { position: relative; isolation: isolate; background: #2457ed; color: white; --line: #ffffff4d; overflow: hidden; }
+.contact-fill { display: none; position: absolute; inset: 0; z-index: -1; background: #2457ed; pointer-events: none; }
+.contact.spill-ready { background: #fafafa; }
+.contact.spill-ready .contact-fill { display: block; clip-path: circle(var(--fill-radius, 2px) at var(--fill-x, 24px) 0); }
+.contact.spill-ready > :not(.contact-fill) { opacity: var(--fill-copy, 0); }
+.contact.spill-ready:focus-within .contact-fill { clip-path: none; }
+.contact.spill-ready:focus-within > :not(.contact-fill) { opacity: 1; }
 .contact .section-meta { color: #d0dcff; }
 .contact-heading { display: flex; justify-content: space-between; align-items: center; gap: 50px; padding: 85px 0 70px; }
 .contact-heading h2 { font-size: clamp(70px, 11vw, 168px); font-weight: 500; letter-spacing: -.07em; line-height: 1.06; }
