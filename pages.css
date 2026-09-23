@@ -95,17 +95,16 @@
 .selector-heading h1 span { color: #2457ed; }
 .selector-heading > p { color: #616872; font-size: 11px; line-height: 1.8; }
 .selector-stage { position: relative; height: clamp(300px, 29vw, 420px); margin-top: 5px; isolation: isolate; background: #f3f4f5; touch-action: pan-y; cursor: grab; user-select: none; }
-.selector-stage:active { cursor: grabbing; }
+.selector-stage:active, .selector-stage.is-dragging, .selector-stage.is-dragging .selector-character { cursor: grabbing; }
 .selector-stage:focus-visible { outline: 2px solid #2457ed; outline-offset: -8px; }
 .selector-backdrop { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 50px; font-size: clamp(95px, 22vw, 340px); font-weight: 600; line-height: 1; letter-spacing: -.085em; color: #dce3f1; z-index: -2; }
 .selector-orbit { position: absolute; left: 12%; right: 12%; height: 65%; top: 21%; border: 1px solid #2457ed30; border-radius: 50%; transform: rotate(-7deg); z-index: -1; }
 .selector-slides { position: absolute; inset: 0; }
-.selector-character { position: absolute; left: 50%; top: 50%; width: min(660px, 65vw); border: 0; padding: 0; background: transparent; cursor: pointer; mix-blend-mode: multiply; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 23vw)) translateY(calc(var(--distance) * -22px)) rotate(calc(var(--offset) * 8deg)) scale(var(--scale)); transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .65s; }
+.selector-character { position: absolute; left: 50%; top: 50%; width: min(660px, 65vw); border: 0; padding: 0; background: transparent; cursor: grab; mix-blend-mode: multiply; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 23vw)) translateY(calc(var(--distance) * -22px)) rotate(calc(var(--offset) * 8deg)) scale(var(--scale)); }
 .selector-character img { width: 100%; height: auto; pointer-events: none; mask-image: radial-gradient(ellipse 42% 80% at 50% 50%, #000 65%, transparent 90%); }
 .selector-character[aria-pressed="true"] img { animation: character-float 6s ease-in-out infinite; }
 .selector-controls { display: flex; align-items: center; justify-content: center; gap: clamp(35px, 8vw, 120px); margin-top: -18px; position: relative; z-index: 12; }
-.selector-controls > button { border: 1px solid #13192030; border-radius: 50%; width: 52px; height: 52px; background: transparent; font-size: 24px; transition: color .2s, background .2s; }
-.selector-controls > button:hover { background: #2457ed; color: white; border-color: #2457ed; }
+.selector-stage.is-dragging .selector-character img { animation-play-state: paused; }
 .selector-detail { text-align: center; min-width: 150px; }
 .selector-role { font-size: 13px; color: #2457ed; margin-bottom: 8px; }
 .selector-name { font-size: clamp(36px, 4vw, 56px); line-height: 1.1; letter-spacing: -.07em; }
@@ -131,7 +130,6 @@
   .selector-orbit { left: -15%; right: -15%; height: 62%; top: 20%; }
   .selector-character { width: 115vw; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 40vw)) translateY(calc(var(--distance) * -15px)) rotate(calc(var(--offset) * 10deg)) scale(var(--scale)); }
   .selector-controls { gap: 26px; margin-top: -8px; }
-  .selector-controls > button { width: 43px; height: 43px; font-size: 20px; }
   .selector-detail { min-width: 130px; }
   .selector-name { font-size: 37px; }
   .selector-role { font-size: 11px; }
