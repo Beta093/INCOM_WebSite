@@ -1,5 +1,5 @@
 // Every animated value is a pure function of scroll position; no autonomous clock.
-export const ORIGIN_STOPS = [275 / 1110, 520 / 1110, 815 / 1110];
+export const ORIGIN_STOPS = [275 / 1065, 520 / 1065, 815 / 1065];
 export function mountOrigin(host, initiallyPaused) {
   const board = document.createElement('div');
   board.className = 'origin-board';
@@ -12,19 +12,20 @@ export function mountOrigin(host, initiallyPaused) {
       <path d="M40 140H115L145 170H210 M40 400H120L190 330H310V275 M740 120H630L590 160H530V230 M740 460H635L585 410H510 M300 45V115L335 150V210 M480 565V485L445 450V360"/>
       <path d="M40 480H210L270 420H330 M740 320H630L580 270H545 M180 45V90 M660 565V520H575 M80 565V505"/>
     </g>
-    <path class="circuit-route" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M40 240H160V180H255V290H390V425H550V320H740" stroke="#2457ed" stroke-width="3"/>
+    <path class="circuit-route" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M40 240H160V180H255V290H390V425H550V500H660V565" stroke="#2457ed" stroke-width="5" stroke-linejoin="round"/>
     <g class="circuit-node" data-node="0"><rect x="208" y="133" width="94" height="94" rx="5"/><rect x="222" y="147" width="66" height="66" rx="2"/><text x="255" y="181">01</text><text class="node-date" x="255" y="252">1981</text></g>
     <g class="circuit-node" data-node="1"><rect x="343" y="243" width="94" height="94" rx="5"/><rect x="357" y="257" width="66" height="66" rx="2"/><text x="390" y="291">02</text><text class="node-date" x="390" y="363">1983</text></g>
-    <g class="circuit-node" data-node="2"><rect x="503" y="378" width="94" height="94" rx="5"/><rect x="517" y="392" width="66" height="66" rx="2"/><text x="550" y="426">03</text><text class="node-date" x="550" y="500">NOW</text></g>
+    <g class="circuit-node" data-node="2"><rect x="503" y="378" width="94" height="94" rx="5"/><rect x="517" y="392" width="66" height="66" rx="2"/><text x="550" y="426">03</text><text class="node-date" x="510" y="500">NOW</text></g>
     <g fill="#8191a8" font-family="monospace" font-size="10"><text x="65" y="75">INCOM / CONNECTION ARCHIVE</text><text x="65" y="541">EST.1981 — STILL BUILDING.</text><text x="600" y="541">REV. 03</text></g>
-    <circle class="circuit-cursor" r="5" fill="#2457ed" stroke="#fff" stroke-width="2" opacity="0"/>
+    <circle class="circuit-exit" cx="660" cy="565" r="1" fill="none"/>
+    <ellipse class="circuit-cursor" rx="14" ry="14" fill="#2457ed" stroke="#fff" stroke-width="2" opacity="0"/>
   </svg>`;
   host.append(board);
   const route = board.querySelector('.circuit-route');
   const length = route.getTotalLength();
   const nodes = [...board.querySelectorAll('.circuit-node')];
   const cursor = board.querySelector('.circuit-cursor');
-  let progress = 0, paused = initiallyPaused, visible = false, frame = 0;
+  let progress = 0, paused = initiallyPaused, visible = false, frame = 0, handingOff = false;
   function render() {
     frame = 0;
     if ((!visible && !paused) || document.hidden) return;
@@ -41,7 +42,16 @@ export function mountOrigin(host, initiallyPaused) {
     const point = route.getPointAtLength(drawn * length);
     cursor.setAttribute('cx', point.x);
     cursor.setAttribute('cy', point.y);
-    cursor.setAttribute('opacity', paused || progress === 0 ? '0' : '1');
+    const distance = drawn * length;
+    const cornerDistance = Math.min(...[120, 180, 275, 385, 520, 655, 815, 890, 1000].map(corner => Math.abs(distance - corner)));
+    const squeeze = Math.max(0, 1 - cornerDistance / 30);
+    const before = route.getPointAtLength(Math.max(0, distance - 10));
+    const after = route.getPointAtLength(Math.min(length, distance + 10));
+    const angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
+    cursor.setAttribute('rx', String(14 + squeeze * 5));
+    cursor.setAttribute('ry', String(14 - squeeze * 4));
+    cursor.setAttribute('transform', `rotate(${angle} ${point.x} ${point.y})`);
+    cursor.setAttribute('opacity', paused || progress === 0 || handingOff ? '0' : '1');
   }
   function schedule() {
     if (!frame && visible && !document.hidden) frame = requestAnimationFrame(render);
@@ -55,10 +65,11 @@ export function mountOrigin(host, initiallyPaused) {
     if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
     schedule();
   });
-  return { update(value, stopMotion) {
+  return { update(value, stopMotion, transfer = false) {
     progress = Math.max(0, Math.min(1, value));
     paused = stopMotion;
-    if (paused) { cancelAnimationFrame(frame); render(); }
+    handingOff = transfer;
+    if (paused || visible) { cancelAnimationFrame(frame); render(); }
     else schedule();
   }};
 }

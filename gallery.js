@@ -43,7 +43,9 @@
   }
   skip.addEventListener('click', closeOpening);
   document.querySelector('.replay').addEventListener('click', () => playOpening(true));
-  if (!location.hash) playOpening();
+  // Show the opening on every page load, including reloads at section anchors.
+  // Keep the user's scroll destination; only an explicit replay returns to the hero.
+  playOpening();
 
   function syncMotion() {
     body.classList.toggle('motion-paused', paused);
@@ -78,11 +80,17 @@
   const projects = [...document.querySelectorAll('.project')];
   const pillar = document.querySelector('.activity-pillar');
   const activityLinks = [...document.querySelectorAll('.activity-nav a')];
-  const activities = document.querySelector('.activities');
-  const exhibit = document.querySelector('.activity-exhibit');
-  const ribbon = document.querySelector('.brand-ribbon');
   const history = document.querySelector('.history');
   const stage = document.querySelector('.origin-stage');
+  const handoff = document.querySelector('.origin-handoff');
+  const handoffPath = handoff.querySelector('path');
+  const handoffRays = [...handoff.querySelectorAll('.handoff-ray')];
+  const handoffPrism = handoff.querySelector('.handoff-prism');
+  const handoffCursor = handoff.querySelector('.handoff-cursor');
+  const handoffTrunk = handoff.querySelector('.handoff-trunk');
+  const resultRows = [...document.querySelectorAll('.results li')];
+  const resultsHeading = document.querySelector('.results-heading');
+  const awards = document.querySelector('.awards');
   const milestones = [...history.querySelectorAll('.timeline article')];
   const stopButtons = [...history.querySelectorAll('[data-stop]')];
   let flight = null;
@@ -95,31 +103,18 @@
   function paintChoreography() {
     scrollFrame = 0;
     const staticMotion = paused || reduced.matches;
-    const exhibitRect = exhibit.getBoundingClientRect();
-    const activityProgress = Math.max(0, Math.min(1, (innerHeight * .5 - exhibitRect.top) / exhibitRect.height));
     const smooth = (a, b, value) => {
       const t = Math.max(0, Math.min(1, (value - a) / (b - a)));
       return t * t * (3 - 2 * t);
     };
-    // Fade across almost half the activity archive in each direction, rather than one short row.
-    const darkness = staticMotion ? 0 : smooth(0, .46, activityProgress) * (1 - smooth(.54, 1, activityProgress));
-    const channel = (light, dark) => Math.round(light + (dark - light) * darkness);
-    activities.style.setProperty('--activity-bg', `rgb(${channel(250, 16)}, ${channel(250, 23)}, ${channel(250, 32)})`);
-    const darkSurface = darkness > .56;
-    activities.style.setProperty('--activity-fg', darkSurface ? '#f6f8fb' : '#101720');
-    // During the midpoint use full-contrast copy; mute only on settled surfaces.
-    activities.style.setProperty('--activity-muted', darkness > .85 ? '#b5c2d5' : darkness < .15 ? '#566172' : darkSurface ? '#fff' : '#101720');
-    activities.style.setProperty('--activity-accent', darkSurface ? '#a3bfff' : darkness < .15 ? '#2457ed' : '#101720');
-    activities.style.setProperty('--line', darkSurface ? '#ffffff35' : '#13192035');
-    if (!staticMotion) {
-      const ribbonProgress = Math.max(0, Math.min(1, (innerHeight - ribbon.getBoundingClientRect().top) / (innerHeight + ribbon.offsetHeight)));
-      ribbon.style.setProperty('--ribbon-shift', `${-60 - ribbonProgress * Math.min(innerWidth * .7, 760)}px`);
-    }
     let nearest = 0;
     let distance = Infinity;
     projects.forEach((project, index) => {
       const rect = project.getBoundingClientRect();
       const delta = Math.abs(rect.top + rect.height / 2 - innerHeight * .5);
+      const arrival = staticMotion ? 1 : smooth(0, 1, (innerHeight - rect.top) / (innerHeight * .7));
+      project.style.setProperty('--arrival', arrival);
+      project.style.setProperty('--word-drift', staticMotion ? '0px' : `${Math.max(-22, Math.min(22, (innerHeight * .5 - rect.top) * .04))}px`);
       if (delta < distance) { nearest = index; distance = delta; }
       project.style.setProperty('--image-drift', staticMotion ? '0px' : Math.max(-16, Math.min(16, (innerHeight * .5 - rect.top) * .035)) + 'px');
     });
@@ -149,7 +144,70 @@
       stopButtons.forEach((el, index) => el.setAttribute('aria-current', String(index === stop)));
       history.querySelector('.flight-count').textContent = String(stop + 1).padStart(2, '0') + ' / 03';
     }
-    flight?.update(progress, staticMotion);
+    // Continue the schematic into the results without adding another pinned scene.
+    const handoffProgress = staticMotion ? 1 : smooth(stage.offsetHeight, innerHeight * .16, awards.getBoundingClientRect().top);
+    const inputProgress = Math.min(1, handoffProgress / .65);
+    const rayProgress = Math.max(0, (handoffProgress - .65) / .35);
+    flight?.update(progress, staticMotion, handoffProgress > 0);
+    handoff.style.setProperty('--handoff-undrawn', String(1 - inputProgress));
+    handoff.style.setProperty('--rays-undrawn', String(1 - rayProgress));
+    handoffRays.forEach(ray => { ray.style.opacity = rayProgress > 0 ? '1' : '0'; });
+    history.querySelector('.flight-count').style.opacity = String(1 - smooth(0, .15, handoffProgress));
+    handoff.style.setProperty('--prism-opacity', String(smooth(.45, .65, handoffProgress) * .65));
+    resultsHeading.style.setProperty('--results-rise', `${staticMotion ? 0 : (1 - handoffProgress) * 24}px`);
+    const exit = history.querySelector('.circuit-exit');
+    if (exit && !staticMotion) {
+      const root = handoff.getBoundingClientRect();
+      const start = exit.getBoundingClientRect();
+      const x = start.left + start.width / 2 - root.left;
+      const y = start.top + start.height / 2 - root.top;
+      const prismX = x;
+      const prismY = awards.getBoundingClientRect().top - root.top - 8;
+      const size = innerWidth < 700 ? 15 : 23;
+      const drop = Math.max(0, prismY - y);
+      handoffPath.setAttribute('d', `M${x} ${y} C${x} ${y + drop * .4} ${prismX} ${y + drop * .7} ${prismX} ${prismY}`);
+      handoffPrism.setAttribute('d', `M${prismX} ${prismY - size} L${prismX + size} ${prismY} L${prismX} ${prismY + size} L${prismX - size} ${prismY} Z M${prismX} ${prismY - size} V${prismY + size} M${prismX - size} ${prismY} H${prismX + size}`);
+      const rows = resultRows.map(row => row.getBoundingClientRect());
+      // The main line stays in the outer gutter, clear of headings and prize text.
+      const railX = (root.width + rows[0].right - root.left) / 2;
+      const lastY = rows.at(-1).top + rows.at(-1).height / 2 - root.top;
+      handoffTrunk.setAttribute('d', `M${prismX} ${prismY} C${prismX} ${prismY + 24} ${railX} ${prismY + 24} ${railX} ${prismY + 48} V${lastY}`);
+      const trunkLength = handoffTrunk.getTotalLength();
+      // Start at the prism exactly when the incoming head arrives, with no jump.
+      const joinT = .5 - Math.sin(Math.asin(1 - 2 * .65) / 3);
+      const joinTop = stage.offsetHeight + (innerHeight * .16 - stage.offsetHeight) * joinT;
+      const trunkDistance = Math.max(0, Math.min(trunkLength, joinTop - awards.getBoundingClientRect().top));
+      const trunkProgress = inputProgress < 1 ? 0 : trunkDistance / trunkLength;
+      handoffTrunk.style.strokeDashoffset = String(1 - trunkProgress);
+      handoffTrunk.style.opacity = trunkProgress > 0 ? '1' : '0';
+      const head = handoffTrunk.getPointAtLength(trunkProgress * trunkLength);
+      handoffRays.forEach((ray, index) => {
+        const row = rows[index];
+        const endX = row.right - root.left;
+        const endY = row.top + row.height / 2 - root.top;
+        ray.setAttribute('d', `M${railX} ${endY} H${endX}`);
+        const reach = trunkProgress > 0 ? smooth(endY - 12, endY + 12, head.y) : 0;
+        // The last branch finishes when the descending head reaches its endpoint.
+        const drawn = index === rows.length - 1 && trunkProgress === 1 ? 1 : reach;
+        ray.style.opacity = drawn > 0 ? '1' : '0';
+        ray.style.strokeDashoffset = String(1 - drawn);
+        resultRows[index].classList.toggle('is-connected', drawn > .5);
+      });
+      const activePath = inputProgress < 1 ? handoffPath : handoffTrunk;
+      const distance = activePath.getTotalLength() * (inputProgress < 1 ? inputProgress : trunkProgress);
+      const point = activePath.getPointAtLength(distance);
+      const next = activePath.getPointAtLength(Math.min(activePath.getTotalLength(), distance + 2));
+      const radius = Math.max(7, Math.min(14, history.querySelector('.circuit-cursor').getBoundingClientRect().height / 2));
+      handoffPath.style.strokeWidth = String(radius / 14 * 5);
+      const squeeze = Math.max(0, 1 - Math.abs(handoffProgress - .65) / .09);
+      handoffCursor.setAttribute('cx', point.x);
+      handoffCursor.setAttribute('cy', point.y);
+      handoffCursor.setAttribute('rx', radius * (1 + squeeze * .4));
+      handoffCursor.setAttribute('ry', radius * (1 - squeeze * .3));
+      handoffCursor.setAttribute('transform', `rotate(${Math.atan2(next.y - point.y, next.x - point.x) * 180 / Math.PI} ${point.x} ${point.y})`);
+      handoffCursor.style.opacity = handoffProgress > 0 ? String(1 - smooth(.97, 1, trunkProgress)) : '0';
+    }
+    handoff.style.visibility = staticMotion || !exit ? 'hidden' : 'visible';
   }
   function queueChoreography() {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(paintChoreography);
