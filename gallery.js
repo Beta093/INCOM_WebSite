@@ -161,15 +161,17 @@
       const start = exit.getBoundingClientRect();
       const x = start.left + start.width / 2 - root.left;
       const y = start.top + start.height / 2 - root.top;
-      const prismX = x;
+      const rows = resultRows.map(row => row.getBoundingClientRect());
+      const railX = (rows[0].left - root.left) / 2;
       const prismY = awards.getBoundingClientRect().top - root.top - 8;
       const size = innerWidth < 700 ? 15 : 23;
+      const prismX = Math.max(railX, size + 4);
       const drop = Math.max(0, prismY - y);
-      handoffPath.setAttribute('d', `M${x} ${y} C${x} ${y + drop * .4} ${prismX} ${y + drop * .7} ${prismX} ${prismY}`);
+      const turn = Math.min(18, drop / 3);
+      // Cross below the history controls, not diagonally through their text.
+      handoffPath.setAttribute('d', `M${x} ${y} V${prismY - turn * 2} Q${x} ${prismY - turn} ${x - turn} ${prismY - turn} H${prismX + turn} Q${prismX} ${prismY - turn} ${prismX} ${prismY}`);
       handoffPrism.setAttribute('d', `M${prismX} ${prismY - size} L${prismX + size} ${prismY} L${prismX} ${prismY + size} L${prismX - size} ${prismY} Z M${prismX} ${prismY - size} V${prismY + size} M${prismX - size} ${prismY} H${prismX + size}`);
-      const rows = resultRows.map(row => row.getBoundingClientRect());
-      // The main line stays in the outer gutter, clear of headings and prize text.
-      const railX = (root.width + rows[0].right - root.left) / 2;
+      // Descend through the left gutter, then branch right into each result.
       const lastY = rows.at(-1).top + rows.at(-1).height / 2 - root.top;
       handoffTrunk.setAttribute('d', `M${prismX} ${prismY} C${prismX} ${prismY + 24} ${railX} ${prismY + 24} ${railX} ${prismY + 48} V${lastY}`);
       const trunkLength = handoffTrunk.getTotalLength();
@@ -183,7 +185,7 @@
       const head = handoffTrunk.getPointAtLength(trunkProgress * trunkLength);
       handoffRays.forEach((ray, index) => {
         const row = rows[index];
-        const endX = row.right - root.left;
+        const endX = row.left - root.left;
         const endY = row.top + row.height / 2 - root.top;
         ray.setAttribute('d', `M${railX} ${endY} H${endX}`);
         const reach = trunkProgress > 0 ? smooth(endY - 12, endY + 12, head.y) : 0;

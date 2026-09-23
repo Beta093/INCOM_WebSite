@@ -255,10 +255,10 @@ h2 span, h2 em { color: var(--muted); font-style: normal; }
 .origin-handoff .handoff-input { stroke-width: 4; }
 .origin-handoff .handoff-trunk { stroke-width: 2.5; }
 .origin-handoff .handoff-ray:nth-of-type(5) { stroke: #2457ed; }
-.results li::before { content: ''; position: absolute; right: -4px; top: calc(50% - 4px); width: 8px; height: 8px; border-radius: 50%; background: #2457ed; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .2s; }
+.results li::before { content: ''; position: absolute; left: -4px; top: calc(50% - 4px); width: 8px; height: 8px; border-radius: 50%; background: #2457ed; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .2s; }
 .results li.is-connected::before { opacity: 1; transform: scale(1); }
 .results li.is-connected .result-prize { color: #2457ed; }
-.origin-results .results li { padding-right: 16px; }
+.origin-results .results li { padding-left: 16px; }
 .origin-handoff .handoff-cursor { fill: #2457ed; stroke: white; stroke-width: 2; opacity: 0; }
 .origin-results .awards { position: relative; background: linear-gradient(#f3f4f5, #fafafa 520px); padding-top: 65px; }
 .origin-results .awards .section-meta { border-top: 0; padding-top: 0; }
