@@ -8,10 +8,14 @@
   <link rel="icon" href="assets/incom-mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/Paperlogy-4Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/Paperlogy-7Bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="gallery.css"><script src="gallery.js" defer></script>
+  <link rel="stylesheet" href="gallery.css?v=20260925-menu"><link rel="stylesheet" href="navigation.css?v=20260925"><script src="gallery.js?v=20260923-controls" defer></script><script src="navigation.js?v=20260925" defer></script>
 </head>
 <body>
   <a href="#main" class="skip-link">본문 바로가기</a>
+  <header class="corner-nav" aria-label="빠른 탐색">
+    <div class="corner-bar"><nav class="corner-shortcuts" aria-label="빠른 메뉴"><a href="#about">인컴 소개</a><a href="join/">가입 신청</a><a href="members/">부원 공간</a></nav><button class="corner-toggle" type="button" aria-expanded="false" aria-controls="corner-panel"><span class="corner-label">메뉴</span><span class="corner-icon" aria-hidden="true"><i></i><i></i></span></button></div>
+    <div class="corner-panel" id="corner-panel" inert aria-hidden="true"><div class="corner-panel-inner"><nav aria-label="전체 메뉴"><a href="#about"><small>01</small> 인컴 소개 <span>↗</span></a><a href="#activities"><small>02</small> 활동 둘러보기 <span>↗</span></a><a href="#history"><small>03</small> 인컴의 역사 <span>↗</span></a><a href="team/"><small>04</small> 운영진 <span>↗</span></a><div class="corner-actions"><a href="join/">가입 신청하기 ↗</a><a href="members/">부원 공간 ↗</a></div></nav><p>INCOM · INHA UNIVERSITY</p></div></div>
+  </header>
   <div class="opening" hidden aria-label="전시 오프닝">
     <div class="opening-panel left"></div><div class="opening-panel right"></div>
     <img class="opening-emblem" src="assets/incom-mark.svg" width="96" height="91" alt="INCOM 로고">
@@ -19,7 +23,7 @@
     <button class="opening-skip" type="button">바로 입장하기 ↗</button>
   </div>
   <main id="main">
-    <svg class="journey-thread" aria-hidden="true"><path class="journey-intro" pathLength="1"/><path class="journey-logo" pathLength="1"/><path class="journey-activity" pathLength="1"/><path class="journey-origin" pathLength="1"/></svg>
+    <svg class="journey-thread" aria-hidden="true"><path class="journey-source" pathLength="1"/><path class="journey-intro" pathLength="1"/><path class="journey-logo" pathLength="1"/><path class="journey-activity" pathLength="1"/><path class="journey-origin" pathLength="1"/></svg>
     <section id="top" class="hero">
       <div class="hero-topline mono"><div class="hero-identity"><img src="assets/incom-mark.svg" width="64" height="61" alt="INCOM 로고"><span>INCOM<br>INHA UNIVERSITY COMPUTER CLUB</span></div><span class="edition">EST. 1981 — STILL CURIOUS.</span></div>
       <h1 class="hero-title">CURIOUS<br><span>BY NATURE.</span></h1>
@@ -118,12 +122,12 @@
     </div>
     <section class="contact section" id="contact">
       <span class="contact-fill" aria-hidden="true"></span>
-      <div class="section-meta"><span>05 — YOUR NEXT CHAPTER</span><span>46TH EXECUTIVE COMMITTEE</span></div>
+      <div class="section-meta"><span>05 — YOUR NEXT CHAPTER</span><span>JOIN INCOM</span></div>
       <div class="contact-heading"><h2>다음은,<br>너의 차례.</h2><img src="assets/incom-mark.svg" width="512" height="487" alt="INCOM 로고"></div>
-      <div class="contact-bottom"><p>2026년 INCOM을 함께 운영하는 사람들.<br>그리고 다음 이야기를 만들어 갈 당신.</p><a class="contact-team" href="team/">운영진 만나기 <span>↗</span></a></div>
+      <div class="contact-bottom"><p>컴퓨터를 좋아하는 마음이 있다면.<br>인컴 가입 신청서를 먼저 둘러보세요.</p><a class="contact-team" href="join/">신청서 작성하기 <span>↗</span></a></div>
       <div class="contact-links"><a href="https://www.instagram.com/inha_incom/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="mailto:incom44th@gmail.com">incom44th@gmail.com ↗</a></div>
     </section>
   </main>
-  <footer><a href="#top" class="footer-logo" aria-label="INCOM 첫 화면으로"><img class="footer-emblem" src="assets/incom-mark.svg" width="180" height="171" alt="">incom</a><nav class="footer-nav" aria-label="사이트 바로가기"><a href="#about">INCOM 소개</a><a href="#activities">2026 활동</a><a href="#history">역사</a><a href="https://github.com/2026-INCOM" target="_blank" rel="noreferrer">아카이브 ↗</a><a href="team/">운영진 ↗</a></nav><div class="footer-bottom mono"><span>© 2026 INCOM — INHA UNIVERSITY COMPUTER CLUB</span><button type="button" class="replay">오프닝 다시 보기 ↺</button><a href="#top">BACK TO TOP ↑</a></div></footer>
+  <footer><a href="#top" class="footer-logo" aria-label="INCOM 첫 화면으로"><img class="footer-emblem" src="assets/incom-mark.svg" width="180" height="171" alt="">incom</a><nav class="footer-nav" aria-label="사이트 바로가기"><a href="#about">INCOM 소개</a><a href="#activities">2026 활동</a><a href="#history">역사</a><a href="https://github.com/2026-INCOM" target="_blank" rel="noreferrer">아카이브 ↗</a><a href="team/">운영진 ↗</a><a href="members/">회원 공간 · 데모 ↗</a></nav><div class="footer-bottom mono"><span>© 2026 INCOM — INHA UNIVERSITY COMPUTER CLUB</span><button type="button" class="replay">오프닝 다시 보기 ↺</button><a href="#top">BACK TO TOP ↑</a></div></footer>
 </body>
 </html>

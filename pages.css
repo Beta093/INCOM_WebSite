@@ -100,8 +100,9 @@
 .selector-backdrop { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 50px; font-size: clamp(95px, 22vw, 340px); font-weight: 600; line-height: 1; letter-spacing: -.085em; color: #dce3f1; z-index: -2; }
 .selector-orbit { position: absolute; left: 12%; right: 12%; height: 65%; top: 21%; border: 1px solid #2457ed30; border-radius: 50%; transform: rotate(-7deg); z-index: -1; }
 .selector-slides { position: absolute; inset: 0; }
-.selector-character { position: absolute; left: 50%; top: 50%; width: min(660px, 65vw); border: 0; padding: 0; background: transparent; cursor: grab; mix-blend-mode: multiply; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 23vw)) translateY(calc(var(--distance) * -22px)) rotate(calc(var(--offset) * 8deg)) scale(var(--scale)); }
-.selector-character img { width: 100%; height: auto; pointer-events: none; mask-image: radial-gradient(ellipse 42% 80% at 50% 50%, #000 65%, transparent 90%); }
+.selector-character { position: absolute; left: 50%; top: 50%; width: min(660px, 65vw); border: 0; padding: 0; background: transparent; cursor: grab; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 23vw)) translateY(calc(var(--distance) * -22px)) rotate(calc(var(--offset) * 8deg)) scale(var(--scale)); }
+.selector-character { background: #f3f4f5; isolation: isolate; mask-image: radial-gradient(ellipse 34% 95% at 50% 50%, #000 78%, transparent 100%); }
+.selector-character img { width: 100%; height: auto; pointer-events: none; mix-blend-mode: multiply; }
 .selector-character[aria-pressed="true"] img { animation: character-float 6s ease-in-out infinite; }
 .selector-controls { display: flex; align-items: center; justify-content: center; gap: clamp(35px, 8vw, 120px); margin-top: -18px; position: relative; z-index: 12; }
 .selector-stage.is-dragging .selector-character img { animation-play-state: paused; }

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const pages = ['index.html', 'team/index.html', '404.html'];
+const pages = ['index.html', 'team/index.html', '404.html', 'members/index.html', 'join/index.html'];
 let checked = 0;
 for (const page of pages) {
   const source = readFileSync(resolve(root, page), 'utf8');

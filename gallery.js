@@ -93,7 +93,10 @@
   const awards = document.querySelector('.awards');
   const contact = document.querySelector('.contact');
   const journey = document.querySelector('.journey-thread');
-  const journeyPaths = [...journey.querySelectorAll('path')];
+  const journeyPaths = [...journey.querySelectorAll('path:not(.journey-source)')];
+  const sourcePath = journey.querySelector('.journey-source');
+  const sceneHost = document.querySelector('#scene');
+  let sphereAnchor = null;
   const heroSection = document.querySelector('.hero');
   const aboutSection = document.querySelector('.about');
   const specimen = document.querySelector('.collective-specimen');
@@ -107,12 +110,34 @@
   let scrollFrame = 0;
   let pillarTimer;
 
+  function paintSource() {
+    const root = journey.getBoundingClientRect();
+    const hero = heroSection.getBoundingClientRect();
+    if (hero.bottom < 0 && sourcePath.hasAttribute('d')) return;
+    const scene = sceneHost.getBoundingClientRect();
+    const gutter = parseFloat(getComputedStyle(aboutSection).paddingLeft) / 2;
+    const x = scene.left - root.left + scene.width * (sphereAnchor?.x ?? .73);
+    const y = scene.top - root.top + scene.height * (sphereAnchor?.y ?? .6);
+    const right = hero.right - root.left - gutter;
+    const bottom = hero.bottom - root.top;
+    const bend = Math.min(bottom - 45, y + 100);
+    sourcePath.setAttribute('d', `M${x} ${y} C${x} ${bend} ${right} ${bend} ${right} ${bottom - 40} Q${right} ${bottom - 12} ${right - 28} ${bottom - 12} H${gutter + 18} Q${gutter} ${bottom - 12} ${gutter} ${bottom + 6}`);
+    const reveal = Math.max(0, Math.min(1, (innerHeight * .78 - (scene.top + scene.height * (sphereAnchor?.y ?? .6))) / Math.max(1, hero.height * .45)));
+    sourcePath.style.strokeDashoffset = String(1 - reveal);
+    sourcePath.style.opacity = reveal > 0 ? '.75' : '0';
+  }
+  sceneHost.addEventListener('sphere-anchor', event => {
+    sphereAnchor = event.detail;
+    if (!paused && !reduced.matches) paintSource();
+  });
+
   function paintJourney(staticMotion) {
     const entry = history.querySelector('.circuit-entry');
     const enabled = !staticMotion && !!entry;
     journey.style.visibility = enabled ? 'visible' : 'hidden';
     body.classList.toggle('journey-ready', enabled);
     if (!enabled) return;
+    paintSource();
     const root = journey.getBoundingClientRect();
     const hero = heroSection.getBoundingClientRect();
     const about = aboutSection.getBoundingClientRect();
@@ -122,7 +147,7 @@
     const target = entry.getBoundingClientRect();
     const marginX = about.left + parseFloat(getComputedStyle(aboutSection).paddingLeft) / 2 - root.left;
     const railX = rail.left + rail.width / 2 - root.left;
-    const startY = hero.bottom - root.top - 28;
+    const startY = hero.bottom - root.top + 6;
     const markY = mark.top - root.top + mark.height * .52;
     const railTop = column.top - root.top;
     const railBottom = column.bottom - root.top;
@@ -217,12 +242,18 @@
       const y = start.top + start.height / 2 - root.top;
       const rows = resultRows.map(row => row.getBoundingClientRect());
       const railX = (rows[0].left - root.left) / 2;
-      const prismY = awards.getBoundingClientRect().top - root.top - 8;
+      const controls = history.querySelector('.origin-controls').getBoundingClientRect();
+      // Keep both the stroke and its moving head outside the controls' hit area.
+      const clearance = 28;
+      const belowControls = controls.bottom - root.top + clearance;
+      const prismY = Math.max(awards.getBoundingClientRect().top - root.top + 24, belowControls + 30);
       const size = innerWidth < 700 ? 15 : 23;
       const prismX = Math.max(railX, size + 4);
-      const drop = Math.max(0, prismY - y);
-      // A descending diagonal, with soft entry and exit instead of a horizontal elbow.
-      handoffPath.setAttribute('d', `M${x} ${y} C${x} ${y + drop * .25} ${prismX} ${y + drop * .8} ${prismX} ${prismY}`);
+      const outsideX = Math.min(root.width - 16, Math.max(x, controls.right - root.left + clearance));
+      const turnY = Math.max(y + 24, belowControls);
+      // Run horizontally below the entire control row, with rounded corners.
+      const laneY = Math.max(turnY, prismY - 18);
+      handoffPath.setAttribute('d', `M${x} ${y} C${outsideX} ${y} ${outsideX} ${y + 12} ${outsideX} ${laneY - 18} Q${outsideX} ${laneY} ${outsideX - 18} ${laneY} H${prismX + 18} Q${prismX} ${laneY} ${prismX} ${prismY}`);
       handoffPrism.setAttribute('d', `M${prismX} ${prismY - size} L${prismX + size} ${prismY} L${prismX} ${prismY + size} L${prismX - size} ${prismY} Z M${prismX} ${prismY - size} V${prismY + size} M${prismX - size} ${prismY} H${prismX + size}`);
       // Descend through the left gutter, then branch right into each result.
       const contactRect = contact.getBoundingClientRect();

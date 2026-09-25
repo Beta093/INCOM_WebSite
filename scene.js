@@ -48,7 +48,7 @@ export function mountScene(host, initiallyPaused) {
   group.add(knot);
 
   const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.53, 48, 32), new THREE.MeshStandardMaterial({ color: 0x164bea, roughness: 0.27, metalness: 0.12 }));
-  sphere.position.set(1.85, -0.1, 0.55);
+  sphere.position.set(2.5, -0.1, 0.55);
   group.add(sphere);
   const smallSphere = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 16), chrome);
   smallSphere.position.set(-1.65, -1.0, 0.8);
@@ -76,6 +76,7 @@ export function mountScene(host, initiallyPaused) {
   let time = 0;
   let lastTime = performance.now();
   let frame = 0;
+  const sphereAnchor = new THREE.Vector3();
 
   function resize() {
     const width = host.clientWidth;
@@ -90,6 +91,13 @@ export function mountScene(host, initiallyPaused) {
   function renderOnce() {
     if (lost) return;
     renderer.render(scene, camera);
+    // Project the moving sphere's lower surface into the DOM thread's coordinates.
+    sphere.getWorldPosition(sphereAnchor);
+    sphereAnchor.y -= .49;
+    sphereAnchor.project(camera);
+    host.dispatchEvent(new CustomEvent('sphere-anchor', { detail: {
+      x: (sphereAnchor.x + 1) / 2, y: (1 - sphereAnchor.y) / 2
+    } }));
   }
   function tick(now) {
     frame = 0;

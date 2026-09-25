@@ -86,7 +86,7 @@
         slide.style.setProperty('--distance', distance);
         slide.style.setProperty('--scale', 1 / (1 + distance * .4));
         slide.style.zIndex = String(Math.round(100 - distance * 10));
-        slide.style.opacity = String(Math.max(0, 1 - distance * .38));
+        slide.style.opacity = '1';
         slide.style.visibility = distance > 2.65 ? 'hidden' : 'visible';
         slide.tabIndex = distance > 2.65 ? -1 : 0;
         slide.setAttribute('aria-hidden', String(distance > 2.65));

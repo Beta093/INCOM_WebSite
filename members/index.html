@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2457ed"><meta name="robots" content="noindex,nofollow">
+  <title>인컴 부원 게시판</title>
+  <link rel="icon" href="../assets/incom-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="members.css"><link rel="stylesheet" href="refined.css?v=20260925"><script src="members.js?v=20260925" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">본문 바로가기</a>
+  <aside class="sidebar">
+    <a class="brand" href="../"><img src="../assets/incom-mark.svg" alt="" width="40" height="38"><span>INCOM<small>MEMBERS SPACE</small></span></a>
+    <p class="nav-caption">부원 게시판</p>
+    <nav aria-label="회원 공간 메뉴">
+      <button data-view="home" aria-current="page"><span>◫</span> 대시보드 <small>01</small></button>
+      <button data-view="schedule"><span>▦</span> 활동 일정 <small>02</small></button>
+      <button data-view="applications"><span>↗</span> 내 신청 내역 <small>03</small></button>
+      <button data-view="notices"><span>≋</span> 공지 · 자료 <small>04</small></button>
+    </nav>
+    <div class="sidebar-foot"><a href="../">인컴 홈페이지 ↗</a><span>인하대학교 컴퓨터 연구분과</span></div>
+  </aside>
+  <main id="main">
+    <header class="topbar"><span>INCOM / <b id="breadcrumb">MEMBERS</b></span><div class="account"><span id="identity">로그인 전</span><button id="exit" hidden>데모 종료 ↗</button></div></header>
+    <section id="gate" class="gate">
+      <div><p class="eyebrow">INCOM</p><h1>부원 게시판</h1><p class="gate-copy">동아리 일정과 공지를 확인하고 활동을 신청하는 곳입니다.</p><div class="login-card"><h2>디스코드 계정으로 입장</h2><p>인컴 서버의 정회원 및 OB/이전회원이 이용할 수 있습니다.<br>활동 신청은 정회원만 가능합니다.</p><button class="primary" disabled>Discord 로그인 · 연결 준비 중</button><small>실제 로그인은 아직 연결되지 않았습니다.</small><hr><p class="demo-label">화면 미리보기 <span>예시 데이터</span></p><div class="demo-buttons"><button data-demo="member">정회원으로 둘러보기</button><button data-demo="ob">OB로 둘러보기</button></div></div></div>
+    </section>
+    <div id="workspace" hidden>
+      <div class="demo-banner"><span><b>DEMO</b> 화면 체험용 가상 일정입니다. 실제 신청은 전송되지 않습니다.</span><label>체험 권한 <select id="role"><option value="member">정회원</option><option value="ob">OB / 이전회원</option></select></label></div>
+      <section id="home-view" class="view">
+        <div class="page-heading"><div><p class="eyebrow">부원 게시판</p><h2>일정과 소식</h2></div><p>2026년 10월 · 예시 화면</p></div>
+        <div class="feature"><div class="feature-copy"><span class="tag">가장 가까운 일정 · 예시</span><h3>오픈 코딩 라운지</h3><p>10월 8일 목요일 · 18:30 — 20:00</p><button class="white-button" data-event="lounge">자세히 보기 →</button></div><div class="feature-date" aria-hidden="true"><span>10월</span><strong>08</strong><small>목요일</small></div></div>
+        <div class="stats"><div><span>10월 일정</span><strong>4 <small>건</small></strong></div><div><span>내 신청</span><strong id="application-count">0 <small>건</small></strong></div><div><span>회원 구분</span><strong id="role-summary" class="role-stat">정회원 <small>열람 + 신청</small></strong></div></div>
+        <div class="dashboard-grid"><section><div class="section-title"><h3>다가오는 일정</h3><button data-view="schedule">전체 보기 →</button></div><div id="upcoming"></div></section><section><div class="section-title"><h3>공지사항</h3><button data-view="notices">전체 보기 →</button></div><div id="notice-preview"></div></section></div>
+      </section>
+      <section id="schedule-view" class="view" hidden><div class="page-heading"><div><p class="eyebrow">부원 게시판</p><h2>활동 일정</h2></div><p>날짜를 눌러 상세 내용을 확인하세요.</p></div><div class="calendar-toolbar"><div><button id="prev-month" aria-label="이전 달">←</button><h3 id="month-label"></h3><button id="next-month" aria-label="다음 달">→</button></div><button id="sample-month">예시 일정 있는 달</button></div><div id="calendar" class="calendar" aria-label="월별 활동 일정"></div><div class="section-title schedule-list-title"><h3>이번 달 일정</h3><select id="category" aria-label="활동 종류 필터"><option value="all">모든 활동</option><option>교류</option><option>교육</option><option>프로젝트</option><option>스터디</option></select></div><div id="schedule-list"></div></section>
+      <section id="applications-view" class="view" hidden><div class="page-heading"><div><p class="eyebrow">부원 게시판</p><h2>내 신청 내역</h2></div></div><p class="section-description">데모 신청은 이 탭에서만 임시 보관되며 새로고침하거나 데모를 종료하면 초기화됩니다.</p><div id="applications"></div></section>
+      <section id="notices-view" class="view" hidden><div class="page-heading"><div><p class="eyebrow">부원 게시판</p><h2>공지 · 자료</h2></div><p>정회원 및 OB 열람 가능</p></div><div id="notices"></div></section>
+      <footer>INCOM <span>인하대학교 컴퓨터 연구분과</span></footer>
+    </div>
+    <noscript><p>회원 공간 미리보기에는 JavaScript가 필요합니다. 실제 회원 인증은 아직 제공되지 않습니다.</p></noscript>
+  </main>
+  <dialog id="event-dialog" aria-labelledby="event-title"><button class="dialog-close" aria-label="닫기">×</button><span class="tag" id="event-category"></span><h2 id="event-title"></h2><p id="event-description"></p><dl id="event-meta"></dl><p class="permission-note" id="permission-note"></p><form id="application-form"><label for="application-note">함께 나누고 싶은 내용 <small>선택 · 데모에는 개인정보를 입력하지 마세요.</small></label><textarea id="application-note" maxlength="200" rows="3" placeholder="궁금한 주제나 기대하는 점을 적어주세요."></textarea><button id="apply" class="primary" type="submit">데모 신청하기 ↗</button></form><button id="cancel-application" class="secondary" hidden>데모 신청 취소</button></dialog>
+  <p id="toast" role="status" class="toast" hidden></p>
+</body>
+</html>
